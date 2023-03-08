@@ -5,6 +5,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  min-width: 300px;
+  max-width: 300px;
 }
 
 code {
@@ -24,6 +26,10 @@ code {
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.mantine-TextInput-label	{
   color: white;
 }
 

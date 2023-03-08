@@ -1,28 +1,31 @@
 {
-  "manifest_version": 2,
-  "name": "Extension Name",
-  "version": "0.1",
-  "description": "Some Description",
-  "permissions": [
-  ],
-  "background": {
-    "scripts": ["static/js/background.js"]
-  },
-  "content_scripts": [{
-    "js": [ "static/js/content.js" ],
-    "matches": [
-      "http://*.example.com/*", "https://*.example.com/*"
-    ]
-  }],
-  "icons": {
-    "192": "logo192.png"
-  },
-  "browser_action": {
+  "manifest_version": 3,
+  "name": "USIL Horario Pre-Matricula",
+  "description": "Arma y descarga tu horario para la universidad desde el site de Matricula",
+  "version": "1.0",
+  "action": {
+    "default_title": "Horario Pre-Matricula",
+    "default_popup": "popup.html",
     "default_icon": {
-      "192": "logo192.png"
-    },
-    "default_title": "Popup",
-    "default_popup": "popup.html"
+        "32" : "icon-usilpre-32.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": [
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "icons":{
+    "16": "icon-usilpre-16.png",
+    "32": "icon-usilpre-32.png",
+    "48": "icon-usilpre-48.png",
+    "128": "icon-usilpre-128.png"
   },
   "options_ui": {
     "page": "options.html"

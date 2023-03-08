@@ -20,7 +20,7 @@ function override(config, env) {
     content: paths.appSrc + '/content'
   };
   // Change output filename template to get rid of hash there
-  config.output.filename = 'static/js/[name].js';
+  config.output.filename = '[name].js';
   // Disable built-in SplitChunksPlugin
   config.optimization.splitChunks = {
     cacheGroups: {default: false}
