@@ -11,13 +11,35 @@ type ScheduleItem = {
   friday: string;
   saturday: string;
   sunday: string;
+  color?: string;
+  mondayData?: string;
+  tuesdayData?: string;
+  wednesdayData?: string;
+  thursdayData?: string;
+  fridayData?: string;
+  saturdayData?: string;
+  sundayData?: string;
 }
 
+let colors = [
+    '#A7E97E',
+    '#9A7EE9',
+    '#5AA6EC',
+    '#EB6F54',
+    '#3BCBA8',
+    '#1C59B6',
+    '#DE649F',
+    '#4AA413',
+    '#D2A01F',
+    '#B4493A',
+    '#526075',
+    '#848544'
+]
 
 let schedule: ScheduleItem[] = [
-  { id: 7, time: '7:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 8, time: '8:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 9, time: '9:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
+  { id: 7, time: '7:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: ''},
+  { id: 8, time: '8:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: ''},
+  { id: 9, time: '9:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: ''},
   { id: 10, time: '10:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
   { id: 11, time: '11:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
   { id: 12, time: '12:00pm', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
@@ -47,31 +69,41 @@ const WeekSchedule = () => {
                 console.log(cursos);
                 for (let i = 0; i < cursos.length; i++) {
                     let curso = cursos[i];
+                    let color = colors[i];
                     let frecuencia = curso.frecuencia;
+                    let bloqueId = curso.bloqueId;
                     for (let j = 0; j < frecuencia; j++) {
                         let dia : keyof ScheduleItem = 'monday';
+                        let diaData: keyof ScheduleItem = 'mondayData';
                         let diaString = 'dia' + j;
                         switch(curso[diaString]){
                             case "Lunes":
                                 dia = 'monday';
+                                diaData = 'mondayData';
                                 break;
                             case "Martes":
                                 dia = 'tuesday';
+                                diaData = 'tuesdayData';
                                 break;
                             case "Miércoles":
                                 dia = 'wednesday';
+                                diaData = 'wednesdayData';
                                 break;
                             case "Jueves":
                                 dia = 'thursday';
+                                diaData = 'thursdayData';
                                 break;
                             case "Viernes":
                                 dia = 'friday';
+                                diaData = 'fridayData';
                                 break;
                             case "Sábado":
                                 dia = 'saturday';
+                                diaData = 'saturdayData';
                                 break;
                             case "Domingo":
                                 dia = 'sunday';
+                                diaData = 'sundayData';
                                 break;
                         }
                         let horaString = 'hora' + j;
@@ -79,6 +111,8 @@ const WeekSchedule = () => {
                         for (let k = 0; k < horas.length; k++){
                             let horasindex : number = horas[k] - 7;
                             newSchedule[horasindex][dia] = 'True';
+                            newSchedule[horasindex][diaData] = bloqueId;
+                            newSchedule[horasindex]["color"] = color;
                         }
     
                     }
@@ -111,13 +145,13 @@ const WeekSchedule = () => {
     {scheduleCompleted.map((item, index) => (
     <tr key={index}>
     <td>{item.time}</td>
-    <td>{item.monday}</td>
-    <td>{item.tuesday}</td>
-    <td>{item.wednesday}</td>
-    <td>{item.thursday}</td>
-    <td style={{ backgroundColor: item.friday == 'True' ? 'red' : 'white' }}></td>
-    <td>{item.saturday}</td>
-    <td>{item.sunday}</td>
+    <td style={{ backgroundColor: item.monday == 'True' ? item.color : 'white' }}>{item.mondayData}</td>
+    <td style={{ backgroundColor: item.tuesday == 'True' ? item.color : 'white' }}>{item.tuesdayData}</td>
+    <td style={{ backgroundColor: item.wednesday == 'True' ? item.color : 'white' }}>{item.wednesdayData}</td>
+    <td style={{ backgroundColor: item.thursday == 'True' ? item.color : 'white' }}>{item.thursdayData}</td>
+    <td style={{ backgroundColor: item.friday == 'True' ? item.color : 'white' }}>{item.fridayData}</td>
+    <td style={{ backgroundColor: item.saturday == 'True' ? item.color : 'white' }}>{item.saturdayData}</td>
+    <td style={{ backgroundColor: item.sunday == 'True' ? item.color : 'white' }}>{item.sundayData}</td>
     </tr>
     ))}
     </tbody>

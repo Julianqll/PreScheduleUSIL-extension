@@ -55,7 +55,8 @@ const getDocumentInfo = (nombre: string) => {
     let nombreCurso = btag.textContent.trim();
     let horarios : any = {
         "nombreCurso" : nombreCurso,
-        "frecuencia" : rowspan
+        "frecuencia" : rowspan,
+        "bloqueId" : nombre.trim()
     }
     let row = bloquetr;
     for (let i = 0; i < rowspan; i++) {
@@ -66,6 +67,7 @@ const getDocumentInfo = (nombre: string) => {
             horarios["hora"+i] = approxTimes(row.cells[4].textContent.trim());
         }
         else{
+
             horarios["dia"+i] = row.cells[5].textContent.trim();
             horarios["hora"+i] = approxTimes(row.cells[7].textContent.trim());
         }
