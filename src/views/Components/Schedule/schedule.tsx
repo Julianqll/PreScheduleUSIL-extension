@@ -1,25 +1,7 @@
 import React from 'react';
-import { ColorSwatch, Flex, Group, Table, Text} from '@mantine/core';
+import { Button, ColorSwatch, Flex, Group, Table, Text} from '@mantine/core';
+import { ScheduleItem, HorarioCurso, CursoItem } from '../../types/types';
 
-type ScheduleItem = {
-    id: number;
-  time: string;
-  monday: string;
-  tuesday: string;
-  wednesday: string;
-  thursday: string;
-  friday: string;
-  saturday: string;
-  sunday: string;
-  color?: string;
-  mondayData?: string;
-  tuesdayData?: string;
-  wednesdayData?: string;
-  thursdayData?: string;
-  fridayData?: string;
-  saturdayData?: string;
-  sundayData?: string;
-}
 
 let colors = [
     '#A7E97E',
@@ -57,11 +39,6 @@ let schedule: ScheduleItem[] = [
   { id: 24, time: '00:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
 ];
 
-type CursoItem ={
-    id: string;
-    nombre: string;
-    color: string;
-}
 
 const WeekSchedule = () => {
 
@@ -210,7 +187,13 @@ const WeekSchedule = () => {
                 <Group>
                     <Text fz="md">{item.nombre}</Text>
                     <Text fz="md">({item.id})</Text>
-                    <ColorSwatch key={index} color={item.color} />
+                    <ColorSwatch key={index} color={item.color ?? 'white'} />
+                    <Button 
+                        style={ {backgroundColor: 'red'}}
+                        radius="xl"
+                    >
+                        Eliminar
+                    </Button>
                 </Group>
             ))}
         </Flex>
