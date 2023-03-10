@@ -1,122 +1,20 @@
 import React from 'react';
 import { Button, ColorSwatch, Flex, Group, Table, Text} from '@mantine/core';
 import { ScheduleItem, HorarioCurso, CursoItem } from '../../types/types';
+import { eliminarCurso, getColorById, getCourses, getScheduleData } from '../../Utils/utils';
 
-
-let colors = [
-    '#A7E97E',
-    '#9A7EE9',
-    '#5AA6EC',
-    '#EB6F54',
-    '#3BCBA8',
-    '#1C59B6',
-    '#DE649F',
-    '#4AA413',
-    '#D2A01F',
-    '#B4493A',
-    '#526075',
-    '#848544'
-]
-
-let schedule: ScheduleItem[] = [
-  { id: 7, time: '7:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: ''},
-  { id: 8, time: '8:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: ''},
-  { id: 9, time: '9:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: ''},
-  { id: 10, time: '10:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 11, time: '11:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 12, time: '12:00pm', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 13, time: '13:00pm', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 14, time: '14:00pm', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 15, time: '15:00pm', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 16, time: '16:00pm', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 17, time: '17:00pm', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 18, time: '18:00pm', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 19, time: '19:00pm', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 20, time: '20:00pm', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 21, time: '21:00pm', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 22, time: '22:00pm', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 23, time: '23:00pm', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-  { id: 24, time: '00:00am', monday: '', tuesday: '', wednesday: '', thursday: '', friday: '', saturday: '', sunday: '' },
-];
 
 
 const WeekSchedule = () => {
 
-    const [cursosL, setCursosL] = React.useState<CursoItem[]>([]);
+    const [cursos, setCursos] = React.useState<CursoItem[]>([]);
 
-    const [scheduleCompleted, setScheduleCompleted] = React.useState<ScheduleItem[]>([]);
+    const [schedule, setSchedule] = React.useState<ScheduleItem[]>([]);
 
     React.useEffect(() => {
-
-        let newSchedule = [...schedule];
-        chrome.storage.local.get(["cursos"]).then((result) => {
-            if (result.cursos){
-                let cursos = result.cursos;
-                console.log(cursos);
-                for (let i = 0; i < cursos.length; i++) {
-                    let nuevoCurso : CursoItem = {
-                        id: '',
-                        nombre: '',
-                        color: '',
-                    };
-                    nuevoCurso.id = cursos[i].bloqueId;
-                    nuevoCurso.nombre = cursos[i].nombreCurso;
-                    nuevoCurso.color = colors[i];
-                    setCursosL([...cursosL, nuevoCurso]);
-                    let curso = cursos[i];
-                    let color = colors[i];
-                    let frecuencia = curso.frecuencia;
-                    let bloqueId = curso.bloqueId;
-                    for (let j = 0; j < frecuencia; j++) {
-                        let dia : keyof ScheduleItem = 'monday';
-                        let diaData: keyof ScheduleItem = 'mondayData';
-                        let diaString = 'dia' + j;
-                        switch(curso[diaString]){
-                            case "Lunes":
-                                dia = 'monday';
-                                diaData = 'mondayData';
-                                break;
-                            case "Martes":
-                                dia = 'tuesday';
-                                diaData = 'tuesdayData';
-                                break;
-                            case "Miércoles":
-                                dia = 'wednesday';
-                                diaData = 'wednesdayData';
-                                break;
-                            case "Jueves":
-                                dia = 'thursday';
-                                diaData = 'thursdayData';
-                                break;
-                            case "Viernes":
-                                dia = 'friday';
-                                diaData = 'fridayData';
-                                break;
-                            case "Sábado":
-                                dia = 'saturday';
-                                diaData = 'saturdayData';
-                                break;
-                            case "Domingo":
-                                dia = 'sunday';
-                                diaData = 'sundayData';
-                                break;
-                        }
-                        let horaString = 'hora' + j;
-                        let horas = curso[horaString];
-                        for (let k = 0; k < horas.length; k++){
-                            let horasindex : number = horas[k] - 7;
-                            newSchedule[horasindex][dia] = 'True';
-                            newSchedule[horasindex][diaData] = bloqueId;
-                            newSchedule[horasindex]["color"] = color;
-                        }
-    
-                    }
-                }
-                setScheduleCompleted(newSchedule);
-            }
-          });
-          
-        },[]);
+        getCourses({setCursos});
+        getScheduleData({setSchedule, cursos});
+    },[cursos]);
     
   return (
     <Flex
@@ -151,16 +49,16 @@ const WeekSchedule = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {scheduleCompleted.map((item, index) => (
+                {schedule.map((item, index) => (
                 <tr key={index}>
                 <td>{item.time}</td>
-                <td style={{ backgroundColor: item.monday == 'True' ? item.color : 'white' }}>{item.mondayData}</td>
-                <td style={{ backgroundColor: item.tuesday == 'True' ? item.color : 'white' }}>{item.tuesdayData}</td>
-                <td style={{ backgroundColor: item.wednesday == 'True' ? item.color : 'white' }}>{item.wednesdayData}</td>
-                <td style={{ backgroundColor: item.thursday == 'True' ? item.color : 'white' }}>{item.thursdayData}</td>
-                <td style={{ backgroundColor: item.friday == 'True' ? item.color : 'white' }}>{item.fridayData}</td>
-                <td style={{ backgroundColor: item.saturday == 'True' ? item.color : 'white' }}>{item.saturdayData}</td>
-                <td style={{ backgroundColor: item.sunday == 'True' ? item.color : 'white' }}>{item.sundayData}</td>
+                <td style={{ backgroundColor: item.monday == 'True' ? getColorById(item.mondayData as string, cursos) : 'white' }}>{item.mondayData}</td>
+                <td style={{ backgroundColor: item.tuesday == 'True' ? getColorById(item.tuesdayData as string, cursos) : 'white' }}>{item.tuesdayData}</td>
+                <td style={{ backgroundColor: item.wednesday == 'True' ? getColorById(item.wednesdayData as string, cursos) : 'white' }}>{item.wednesdayData}</td>
+                <td style={{ backgroundColor: item.thursday == 'True' ? getColorById(item.thursdayData as string, cursos) : 'white' }}>{item.thursdayData}</td>
+                <td style={{ backgroundColor: item.friday == 'True' ? getColorById(item.fridayData as string, cursos) : 'white' }}>{item.fridayData}</td>
+                <td style={{ backgroundColor: item.saturday == 'True' ? getColorById(item.saturdayData as string, cursos) : 'white' }}>{item.saturdayData}</td>
+                <td style={{ backgroundColor: item.sunday == 'True' ? getColorById(item.sundayData as string, cursos) : 'white' }}>{item.sundayData}</td>
                 </tr>
                 ))}
                 </tbody>
@@ -183,7 +81,7 @@ const WeekSchedule = () => {
             >
                 USIL Pre-horario
             </Text>
-            {cursosL.map((item, index) => (
+            {cursos.map((item, index) => (
                 <Group>
                     <Text fz="md">{item.nombre}</Text>
                     <Text fz="md">({item.id})</Text>
@@ -191,6 +89,7 @@ const WeekSchedule = () => {
                     <Button 
                         style={ {backgroundColor: 'red'}}
                         radius="xl"
+                        onClick={() => eliminarCurso(item.id as string)}
                     >
                         Eliminar
                     </Button>
