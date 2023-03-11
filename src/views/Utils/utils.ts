@@ -15,34 +15,37 @@ let colors = [
     '#848544'
 ]
 
-
 type getCoursesProps = {
     setCursos : (cursos: CursoItem[]) => void;
+}
+
+function convertirCursosdeStorage(cursosLista:any) : CursoItem[] {
+    let cursosList : CursoItem[] = [];
+    let cursosTemp = cursosLista;
+    cursosTemp.map((item : any, index : number) => {
+        let nuevoCurso : CursoItem = {};
+        nuevoCurso.id = item.bloqueId;
+        nuevoCurso.nombre = item.nombreCurso;
+        nuevoCurso.color = colors[index];
+        let listaHorarios : HorarioCurso[] = [];
+        for (let j = 0; j < item.frecuencia; j++) {
+            let horario: HorarioCurso = {};
+            let diaString = 'dia' + j;
+            let horaString = 'hora' + j;
+            horario.dia = item[diaString];
+            horario.horas = item[horaString];
+            listaHorarios.push(horario);
+        }
+        nuevoCurso.horario = listaHorarios;
+        cursosList.push(nuevoCurso);
+    });
+    return cursosList;
 }
 
 export function getCourses({setCursos} : getCoursesProps) {
     chrome.storage.local.get(["cursos"]).then((result) => {
         if (result.cursos){
-            let cursosList : CursoItem[] = [];
-            let cursosTemp = result.cursos;
-            console.log(cursosTemp);
-            cursosTemp.map((item : any, index : number) => {
-                let nuevoCurso : CursoItem = {};
-                nuevoCurso.id = item.bloqueId;
-                nuevoCurso.nombre = item.nombreCurso;
-                nuevoCurso.color = colors[index];
-                let listaHorarios : HorarioCurso[] = [];
-                for (let j = 0; j < item.frecuencia; j++) {
-                    let horario: HorarioCurso = {};
-                    let diaString = 'dia' + j;
-                    let horaString = 'hora' + j;
-                    horario.dia = item[diaString];
-                    horario.horas = item[horaString];
-                    listaHorarios.push(horario);
-                }
-                nuevoCurso.horario = listaHorarios;
-                cursosList.push(nuevoCurso);
-            });
+            let cursosList : CursoItem[] = convertirCursosdeStorage(result.cursos);
             setCursos([...cursosList]);
         }
     });
@@ -140,4 +143,37 @@ export function eliminarCurso(id : string){
             });
         }
     });
+}
+
+export function cursoDisponible(cursos: any){
+    let cursosGuardados : CursoItem[] = [];
+    chrome.storage.local.get(["cursos"]).then((result) => {
+        if (result.cursos){
+            cursosGuardados = convertirCursosdeStorage(result.cursos);
+        }
+    });
+    let cursoNuevo = convertirCursosdeStorage(cursos)[0];
+    for (const cursoGuardado of cursosGuardados) {
+        if (cursoGuardado.id === cursoNuevo.id){
+            return false;
+
+        }
+        else{
+            for (const horarioGuardado of cursoGuardado.horario!){
+                for (const horarioNuevo of cursoNuevo.horario!){
+                    if (horarioGuardado.dia === horarioNuevo.dia){
+                        for (const horaGuardada of horarioGuardado.horas!){
+                            for (const horaNueva of horarioNuevo.horas!){
+                                if (horaGuardada === horaNueva){
+                                    return false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return true;
+
 }

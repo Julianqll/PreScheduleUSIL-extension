@@ -45,6 +45,15 @@ function App() {
           </Text>
           {course ? 
             <Box maw={300} mx="auto">
+              <Text
+                c="red"
+                sx={{ fontFamily: 'Greycliff CF, sans-serif' }}
+                ta="center"
+                fz="sm"
+                fw={700}
+              >
+              {nombreCourse}
+              </Text>
               <form onSubmit={form.onSubmit(( _event) => {searchBloqueHandler()})}>
                 <TextInput
                   sx={{ color: 'white' }}
@@ -68,13 +77,13 @@ function App() {
                   fz="md"
                   fw={400}
                 >
-                  Curso encontrado: {nombreCourse}
+                  Curso encontrado y agregado: {nombreCourse}
                 </Text>
                 <Group position="center" mt="md">
                   <Button
                     onClick={() => goToSchedule()}
                   >
-                    Agregar al horario
+                    Ver el horario
                   </Button>
                 </Group>
               </form>

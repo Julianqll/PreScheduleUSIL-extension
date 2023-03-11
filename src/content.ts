@@ -1,3 +1,6 @@
+import { CursoItem, HorarioCurso } from "./views/types/types";
+import { cursoDisponible } from "./views/Utils/utils";
+
 function searchBloque (
     nombre : string , 
     setCourse : (course : boolean) => void, 
@@ -14,8 +17,18 @@ function searchBloque (
               }
               else{
                   chrome.runtime.sendMessage({method: "get"}, (response) => {
+                    if (response.value === "Mismo curso"){
+                        setNombreCourse('El curso ya se encuentra en su horario');
+                        setCourse(true);
+                    }
+                    else if (response.value === "Horario cruzado"){
+                        setNombreCourse('El curso presenta cruce con un curso ya registrado');
+                        setCourse(true);
+                    }
+                    else{
                         setNombreCourse(response.value);
                         setCourse(false);
+                    }
                   });
               }
           });
@@ -38,7 +51,47 @@ const getDocumentInfo = (nombre: string) => {
         const endHour = end[1] >= 40 ? end[0] + 1 : end[0]; // aproximar horas de fin
         const endArr = Array.from({ length: endHour - startHour }, (_, i) => startHour + i); // generar array de horas de fin
         return endArr;
-    }
+    };
+    let colors = [
+        '#A7E97E',
+        '#9A7EE9',
+        '#5AA6EC',
+        '#EB6F54',
+        '#3BCBA8',
+        '#1C59B6',
+        '#DE649F',
+        '#4AA413',
+        '#D2A01F',
+        '#B4493A',
+        '#526075',
+        '#848544'
+    ];
+    
+    const convertirCursosdeStorage = (cursosLista:any) : CursoItem[] => {
+        let cursosList : CursoItem[] = [];
+        if (!Array.isArray(cursosLista)){
+            cursosLista = [cursosLista];
+        }
+        let cursosTemp = cursosLista;
+        cursosTemp.map((item : any, index : number) => {
+            let nuevoCurso : CursoItem = {};
+            nuevoCurso.id = item.bloqueId;
+            nuevoCurso.nombre = item.nombreCurso;
+            nuevoCurso.color = colors[index];
+            let listaHorarios : HorarioCurso[] = [];
+            for (let j = 0; j < item.frecuencia; j++) {
+                let horario: HorarioCurso = {};
+                let diaString = 'dia' + j;
+                let horaString = 'hora' + j;
+                horario.dia = item[diaString];
+                horario.horas = item[horaString];
+                listaHorarios.push(horario);
+            }
+            nuevoCurso.horario = listaHorarios;
+            cursosList.push(nuevoCurso);
+        });
+        return cursosList;
+    };
 
     let n_nombre_bloque = nombre.trim()+'\u00A0';
     let frame : any = document.querySelector('frame[name="ficha Matricula"]');
@@ -74,19 +127,51 @@ const getDocumentInfo = (nombre: string) => {
         bloquetr = row;
     }
     let addCursos = [horarios]
+    let horarioCruzado : boolean = false;
+    let cursoRepetido : boolean = false;
     chrome.storage.local.get(["cursos"]).then((result) => {
         if (result.cursos){
-            addCursos = result.cursos;
-            addCursos.push(horarios);
-            chrome.storage.local.set({ cursos: addCursos }).then(() => {
-            });
+            let cursosGuardados = convertirCursosdeStorage(result.cursos);
+            let cursoNuevo = convertirCursosdeStorage(horarios)[0];
+            if (cursosGuardados.length > 0){
+                cursosGuardados.forEach((cursoGuardado) => {
+                    if (cursoGuardado.id === cursoNuevo.id || cursoGuardado.nombre === cursoNuevo.nombre){
+                        cursoRepetido = true;
+                        chrome.runtime.sendMessage({method: "set", value: "Mismo curso" }, () => {});
+                    }
+                    else{
+                        cursoGuardado.horario?.forEach((horarioGuardado) => {
+                            cursoNuevo.horario?.forEach((horarioNuevo) => {
+                                if (horarioGuardado.dia === horarioNuevo.dia){
+                                    horarioGuardado.horas?.forEach((horaGuardada) => {
+                                        horarioNuevo.horas?.forEach((horaNueva) => {
+                                            if (horaGuardada === horaNueva){
+                                                horarioCruzado = true;
+                                                chrome.runtime.sendMessage({method: "set", value: "Horario cruzado" }, () => {});
+                                            }
+                                        })
+                                    })
+                                }
+                            })
+                        })
+                    }
+                });
+                
+            }
+            if (!horarioCruzado && !cursoRepetido){
+                addCursos = result.cursos;
+                addCursos.push(horarios);
+                chrome.storage.local.set({ cursos: addCursos }).then(() => {
+                });
+                chrome.runtime.sendMessage({method: "set", value: nombreCurso }, () => {});
+            }
         }
         else{
             chrome.storage.local.set({ cursos: addCursos }).then(() => {
-              });
+            });
+            chrome.runtime.sendMessage({method: "set", value: nombreCurso }, () => {});
         }
       });
-    chrome.runtime.sendMessage({method: "set", value: nombreCurso }, () => {});
   }
 
 export  {
