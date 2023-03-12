@@ -27,7 +27,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       await new Promise(s => setTimeout(s, 1000));
       console.log("End Sleep 1s.");
     }
-    value = "Error: No se pudo obtener la información del bloque.";
+    value = "Error: Ocurrió un error al buscar el bloque";
   }
 });
 

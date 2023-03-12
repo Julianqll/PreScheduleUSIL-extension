@@ -4,7 +4,9 @@ import { cursoDisponible } from "./views/Utils/utils";
 function searchBloque (
     nombre : string , 
     setCourse : (course : boolean) => void, 
-    setNombreCourse : (course : string) => void) {
+    setNombreCourse : (course : string) => void,
+    setLoading: (loading : boolean) => void
+    ) {
     chrome.runtime.sendMessage({method: "clear"}, () => {
       chrome.tabs.query({ active: true, currentWindow: true}, (tabs) => {
           chrome.scripting.executeScript({
@@ -14,6 +16,8 @@ function searchBloque (
           }, () => {
               if (chrome.runtime.lastError) {
                 setCourse(true);
+                setLoading(false);
+
               }
               else{
                   chrome.runtime.sendMessage({method: "get"}, (response) => {
@@ -25,10 +29,15 @@ function searchBloque (
                         setNombreCourse('El curso presenta cruce con un curso ya registrado');
                         setCourse(true);
                     }
+                    else if (response.value === "Curso no encontrado"){
+                        setNombreCourse('El bloque-curso no se encontró');
+                        setCourse(true);
+                    }
                     else{
                         setNombreCourse(response.value);
                         setCourse(false);
                     }
+                    setLoading(false);
                   });
               }
           });
@@ -96,6 +105,9 @@ const getDocumentInfo = (nombre: string) => {
     let n_nombre_bloque = nombre.trim()+'\u00A0';
     let frame : any = document.querySelector('frame[name="ficha Matricula"]');
     let bloque : any = Array.from(frame.contentDocument.getElementsByTagName('font')).filter((el: any)  => el.textContent.trim() === n_nombre_bloque.trim());
+    if (bloque.length == 0) {
+        chrome.runtime.sendMessage({method: "set", value: "Curso no encontrado" }, () => {});
+    }
     let bloquep = bloque[0].parentNode;
     let bloquetd = bloquep.parentNode;
     let rowspan = bloquetd.getAttribute('rowspan');
