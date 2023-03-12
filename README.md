@@ -1,36 +1,73 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+<p align="center">
+  <img src="./public/icon-usilpre-128.png" alt="USIL Pre-Horario Extension">
+</p>
 
-In the project directory, you can run:
+# USIL Pre-Horario Extension
+---
+Extensión de Chrome que permite generar un pre-horario con cursos seleccionados por el usuario, al momento de que el puedas matricularte (sin importar la prioridad de matrícula).
 
-### `npm test`
+  ### Funcionalidades actuales:
+  - Agregar y eliminar cursos
+  - Vista de cursos y bloques desde la extensión
+  - Vista de horario completo en página adicional de la extensión
+  - Advertencia de cruce de cursos
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  ### ¿Cómo usarla?
 
-### `npm run build`
+  Para poder usar la extensión, sigue los pasos a continuación:
+  1. En el tab "Agregar", Copia el código del bloque completo(tal como aparece en la ventana emergente de bloques)
+  2. Procede a buscarlo. Si el bloque presenta cruce o el curso ya está registrado, obtendrás un error; de lo contrario, se agregará automáticamente
+  3. En el tab "Ver cursos", podrás ver tus cursos registrados y acceder a tu horario creado
+  4. Podrás visualizar todos tus cursos agregados en la pantalla de horario
+  <p align="center">
+    <img src="./public/usilext_captura1.png" width="250" alt="Paso 1">
+    <img src="./public/usilext_captura2.png" width="250" alt="Paso 2">
+    <img src="./public/usilext_captura3.png" width="250" alt="Paso 3">
+    <img src="./public/usilext_captura4.png" width="250" alt="Paso 4">
+  </p>
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Contribuir
+Este proyecto fue creado con [Create React App](https://github.com/facebook/create-react-app).
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+  ### Requisitos
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  - Node.js (versión recomendada: 14.0.0 o superior)
+  - npm (versión recomendada: 6.14.0 o superior)
 
-### `npm run eject`
+  ### Instalación
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  1. Clonar el repositorio en tu ordenador:
+  ```
+  git clone 
+  ```
+  2. Abrir una terminal en la carpeta del proyecto:
+  ```
+  cd PreScheduleUSIL-extension 
+  ```
+  3. Instalar las dependencias:
+  ```
+  npm install 
+  ```
+  ### Uso
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  1. Iniciar la aplicación en modo de desarrollo:
+  ```
+  npm start 
+  ```
+  2. Abrir [http://localhost:3000](http://localhost:3000) en tu navegador web para ver la aplicación en funcionamiento.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+  3. Realizar cambios en el código fuente y guardarlos. La aplicación se actualizará automáticamente con los cambios.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+  4. Para construir la aplicación para producción:
+  ```
+  npm run build 
+  ```
+  5. La versión optimizada para producción estará disponible en la carpeta `build/`.
 
-## Learn More
+  Si deseas contribuir a este proyecto, por favor sigue los siguientes pasos:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+  1. Crea un fork del proyecto.
+  2. Realiza tus cambios en una rama separada.
+  3. Envía un pull request a la rama principal del proyecto.
