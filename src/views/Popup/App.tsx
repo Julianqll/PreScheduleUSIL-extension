@@ -103,6 +103,8 @@ function App() {
                     ta="center"
                     fz="md"
                     fw={400}
+                    ml={10}
+                    mr={10}
                   >
                     Curso encontrado y agregado: {nombreCourse}
                   </Text>
