@@ -1,7 +1,7 @@
 let value = "";
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log(message.method);
+  //console.log(message.method);
   switch (message.method){
   case "set":
     value = message.value;
@@ -23,9 +23,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         sendResponse({value: value})
         return;
       }
-      console.log("Start Sleep 1s.");
+      //console.log("Start Sleep 1s.");
       await new Promise(s => setTimeout(s, 1000));
-      console.log("End Sleep 1s.");
+      //console.log("End Sleep 1s.");
     }
     value = "Error: Ocurrió un error al buscar el bloque";
   }
