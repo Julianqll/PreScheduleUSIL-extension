@@ -1,5 +1,3 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 <p align="center">
   <img src="./public/icon-usilpre-128.png" alt="USIL Pre-Horario Extension">
 </p>
