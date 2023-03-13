@@ -10,7 +10,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 </p>
 
 ---
-Extensión de Chrome que permite generar un pre-horario con cursos seleccionados por el usuario, al momento de que el puedas matricularte (sin importar la prioridad de matrícula).
+Extensión de Chrome que permite generar un pre-horario con cursos seleccionados por el usuario (sin importar la prioridad de matrícula), de forma rápida y sencilla
 
   ### Funcionalidades actuales:
   - Agregar y eliminar cursos
