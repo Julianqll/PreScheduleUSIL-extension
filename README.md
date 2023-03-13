@@ -5,6 +5,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 </p>
 
 # USIL Pre-Horario Extension
+<p align="center">
+  <img src="./public/usilext_fondo.png" alt="USIL Pre-Horario Extension">
+</p>
+
 ---
 Extensión de Chrome que permite generar un pre-horario con cursos seleccionados por el usuario, al momento de que el puedas matricularte (sin importar la prioridad de matrícula).
 
