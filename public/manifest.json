@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "USIL Horario Pre-Matricula",
-  "description": "Arma y descarga tu horario para la universidad desde el site de Matricula",
+  "name": "USIL Pre-Horario Extension",
+  "description": "Arma tu horario para la universidad desde el site de Matricula",
   "version": "1.0",
   "action": {
-    "default_title": "Horario Pre-Matricula",
+    "default_title": "USIL Pre-Horario",
     "default_popup": "popup.html",
     "default_icon": {
         "32" : "icon-usilpre-32.png"
