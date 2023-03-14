@@ -8,7 +8,8 @@
 </p>
 
 ---
-Extensión de Chrome que permite generar un pre-horario con cursos seleccionados por el usuario (sin importar la prioridad de matrícula), de forma rápida y sencilla
+Extensión de Chrome que permite generar un pre-horario con cursos seleccionados por el usuario (sin importar la prioridad de matrícula), de forma rápida y sencilla. 
+- Puedes descargarla y probarla aquí: [USIL Pre-Horario Extension](https://chrome.google.com/webstore/detail/usil-pre-horario-extensio/jcnpdinahmogjghiebdlggolikddgkeb)
 
   ### Funcionalidades actuales:
   - Agregar y eliminar cursos
